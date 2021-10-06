@@ -1,6 +1,7 @@
 # SistemasOperacionais
 
 Nome: Emilly Roberta da Silva
+
 Matricula: 5978
 
 As funções dos algoritmos de substituições de páginas (fifo, second_chance, nru e aging),
