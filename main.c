@@ -77,13 +77,53 @@ int second_chance(int8_t** page_table, int num_pages, int prev_page,
 int nru(int8_t** page_table, int num_pages, int prev_page,
         int fifo_frm, int num_frames, int clock)
 {
-  return -1;
-}
+//classe 0
+    for(int i=0; i<num_pages; i++)
+    {
+        if(page_table[i][PT_MAPPED] !=0)
+        {
+            if(page_table[i][PT_REFERENCE_BIT] == 0 && page_table[i][PT_DIRTY] == 0) //verifica se o bit R e o M são iguais a 0
+            {
+                return i;
+            }
+        }
+    }
 
-int aging(int8_t** page_table, int num_pages, int prev_page,
-          int fifo_frm, int num_frames, int clock)
-{
-    return -1;
+//Classe 1
+    for(int i=0; i<num_pages; i++)
+    {
+        if(page_table[i][PT_MAPPED] !=0)
+        {
+            if(page_table[i][PT_REFERENCE_BIT] == 0 && page_table[i][PT_DIRTY] == 1)
+            {
+                return i;
+            }
+        }
+    }
+
+//Classe 2
+    for(int i=0; i<num_pages; i++)
+    {
+        if(page_table[i][PT_MAPPED] !=0)
+        {
+            if(page_table[i][PT_REFERENCE_BIT] == 1 && page_table[i][PT_DIRTY] == 0)
+            {
+                return i;
+            }
+        }
+    }
+
+//Classe 3
+    for(int i=0; i<num_pages; i++)
+    {
+        if(page_table[i][PT_MAPPED] !=0)
+        {
+            if(page_table[i][PT_REFERENCE_BIT] == 1 && page_table[i][PT_DIRTY] == 1)
+            {
+                return i;
+            }
+        }
+    }
 
 }
 
