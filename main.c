@@ -53,22 +53,29 @@ int fifo(int8_t** page_table, int num_pages, int prev_page,
 
 
 int second_chance(int8_t** page_table, int num_pages, int prev_page,
-                  int fifo_frm, int num_frames, int clock) {
+                  int fifo_frm, int num_frames, int clock)
+{
 
-	//percorre a matriz
-    for (int i = 0; i < num_pages; i++){
-    	for(int j = 0; j < num_pages; j++){
-    	    if (page_table[j][PT_FRAMEID] == i){ //verifica se o frame é igual a i
-    		    if (page_table[j][PT_REFERENCE_BIT] == 0){ //verifica se o bit R é 0
-    		    	return j;
-                }else{
+    //percorre a matriz
+    for (int i = 0; i < num_pages; i++)
+    {
+        for(int j = 0; j < num_pages; j++)
+        {
+            if (page_table[j][PT_FRAMEID] == i)  //verifica se o frame é igual a i
+            {
+                if (page_table[j][PT_REFERENCE_BIT] == 0)  //verifica se o bit R é 0
+                {
+                    return j;
+                }
+                else
+                {
 
-               	    page_table[j][PT_REFERENCE_BIT] = 0; //bit R recebe 0
-    		        prev_page = j; //atualiza a ultma pagina acessada
-    		        break;
-	         	}
+                    page_table[j][PT_REFERENCE_BIT] = 0; //bit R recebe 0
+                    prev_page = j; //atualiza a ultma pagina acessada
+                    break;
+                }
             }
-     	}
+        }
     }
     return fifo(page_table, num_pages,prev_page, fifo_frm, num_frames, clock);
 
@@ -125,6 +132,35 @@ int nru(int8_t** page_table, int num_pages, int prev_page,
         }
     }
 
+}
+
+int aging(int8_t** page_table, int num_pages, int prev_page,
+          int fifo_frm, int num_frames, int clock)
+{
+    int menor = 0;
+    int i = 0;
+    int primeiraPosicao = 0;
+
+
+    while(i != num_pages)
+    {
+        if(page_table[i][PT_MAPPED] == 0) i++; //verifica se o endereço é zero e vai pra próxima pg
+
+        else
+        {
+            primeiraPosicao ++;
+            if(primeiraPosicao == 1)  //pega a primeira posicao de um endereco valido
+            {
+                menor = i;
+            }
+            if(page_table[menor][PT_AGING_COUNTER] > page_table[i+1][PT_AGING_COUNTER])//verifica se oq esta no menor é maior que a pagina valida seguinte
+            {
+                menor=i;
+            }
+            i++;
+        }
+    }
+    return menor;
 }
 
 
