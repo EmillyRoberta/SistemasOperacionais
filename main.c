@@ -55,7 +55,22 @@ int fifo(int8_t** page_table, int num_pages, int prev_page,
 int second_chance(int8_t** page_table, int num_pages, int prev_page,
                   int fifo_frm, int num_frames, int clock) {
 
-    return -1;
+	//percorre a matriz
+    for (int i = 0; i < num_pages; i++){
+    	for(int j = 0; j < num_pages; j++){
+    	    if (page_table[j][PT_FRAMEID] == i){ //verifica se o frame é igual a i
+    		    if (page_table[j][PT_REFERENCE_BIT] == 0){ //verifica se o bit R é 0
+    		    	return j;
+                }else{
+
+               	    page_table[j][PT_REFERENCE_BIT] = 0; //bit R recebe 0
+    		        prev_page = j; //atualiza a ultma pagina acessada
+    		        break;
+	         	}
+            }
+     	}
+    }
+    return fifo(page_table, num_pages,prev_page, fifo_frm, num_frames, clock);
 
 }
 
